@@ -1,9 +1,12 @@
-/* বেসিক রিসেট এবং সেন্টার অ্যালাইনমেন্ট */
+/* ==========================================
+   ১. বেসিক রিসেট এবং গ্লোবাল স্টাইল
+   ========================================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-tap-highlight-color: transparent; /* মোবাইলে ট্যাপ করলে যে নীল বক্স আসে তা রিমুভ করার জন্য */
 }
 
 body {
@@ -11,17 +14,21 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #e2e8f0; /* প্রথম পিকচারের মতো লাইট গ্রে ব্যাকগ্রাউন্ড */
+  background-color: #e2e8f0; /* লাইট গ্রে ব্যাকগ্রাউন্ড */
   transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
+  padding: 20px;
+  perspective: 1000px; /* ৩D ডেপথ তৈরি করার জন্য */
 }
 
-/* ডার্ক মোড থিম (৩ নম্বর পিকচারের জন্য) */
+/* ডার্ক মোড থিম */
 body.dark-mode {
   background-color: #12161a;
 }
 
-/* ৩D গ্লাস বেস প্যানেল */
+/* ==========================================
+   ২. মূল ৩D গ্লাস প্যানেল (ডেস্কটপ ও গ্লোবাল)
+   ========================================== */
 .glass-panel {
   background: rgba(255, 255, 255, 0.4);
   padding: 14px;
@@ -30,23 +37,27 @@ body.dark-mode {
   flex-direction: column;
   gap: 12px;
   box-shadow: 
-    0 20px 50px rgba(0, 0, 0, 0.05),
+    -10px 20px 40px rgba(0, 0, 0, 0.08),
     inset 0 1px 2px rgba(255, 255, 255, 0.8),
     inset 0 -1px 2px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  transform: rotateX(20deg) rotateY(-10deg) rotateZ(5deg); /* আইসোমেট্রিক 3D লুক */
+  
+  /* ছবির মতো নিখুঁত ৩D আইসোমেট্রিক লুক */
+  transform: rotateX(20deg) rotateY(-12deg) rotateZ(6deg); 
   transform-style: preserve-3d;
-  perspective: 1000px;
-  transition: transform 0.5s ease;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
+/* হোভার করলে হালকা ৩D মুভমেন্ট */
 .glass-panel:hover {
-  transform: rotateX(15deg) rotateY(-5deg) rotateZ(2deg);
+  transform: rotateX(16deg) rotateY(-8deg) rotateZ(4deg);
 }
 
-/* মূল ক্যাপসুল বাটন স্টিলিং */
+/* ==========================================
+   ৩. ৩D ক্যাপসুল বাটন স্টিলিং
+   ========================================== */
 .liquid-btn {
   position: relative;
   width: 280px;
@@ -56,15 +67,17 @@ body.dark-mode {
   border-radius: 50px;
   cursor: pointer;
   overflow: hidden;
+  transform-style: preserve-3d;
+  transform: translateZ(10px); /* বাটনগুলোকে বেস থেকে একটু ওপরে ভাসিয়ে রাখার জন্য */
   box-shadow: 
     0 4px 10px rgba(0, 0, 0, 0.03),
     inset 0 2px 4px rgba(255, 255, 255, 0.7),
     inset 0 -2px 4px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.4);
-  transition: all 0.4s ease;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* ডার্ক মোডে বাটনের বডি কিছুটা ডার্ক হবে */
+/* ডার্ক মোডে বাটনের বডি */
 body.dark-mode .liquid-btn {
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -73,7 +86,7 @@ body.dark-mode .liquid-btn {
     inset 0 1px 1px rgba(255, 255, 255, 0.15);
 }
 
-/* বাটনের ভেতরের টেক্সট ও আইকন লেআউট */
+/* ভেতরের টেক্সট ও আইকন */
 .btn-content {
   position: relative;
   z-index: 5;
@@ -86,6 +99,7 @@ body.dark-mode .liquid-btn {
   color: #334155;
   font-weight: 600;
   font-size: 16px;
+  transform: translateZ(20px); /* টেক্সট ও আইকনকে আরও পপ-আপ লুক দেওয়ার জন্য */
   transition: color 0.4s ease;
 }
 
@@ -93,16 +107,12 @@ body.dark-mode .btn-content {
   color: #94a3b8;
 }
 
-.btn-content .icon {
-  font-size: 20px;
-}
+.btn-content .icon { font-size: 20px; }
+.btn-content .dots { opacity: 0.5; font-size: 14px; }
 
-.btn-content .dots {
-  opacity: 0.5;
-  font-size: 14px;
-}
-
-/* লিকুইড ব্যাকগ্রাউন্ড অ্যানিমেশন লেয়ার */
+/* ==========================================
+   ৪. লিকুইড ব্যাকগ্রাউন্ড এবং কালার গ্লো
+   ========================================== */
 .liquid-bg {
   position: absolute;
   top: 50%;
@@ -113,41 +123,76 @@ body.dark-mode .btn-content {
   transform: translate(-50%, -50%);
   transition: width 0.6s cubic-bezier(0.1, 0.8, 0.3, 1), height 0.6s cubic-bezier(0.1, 0.8, 0.3, 1);
   z-index: 1;
-  filter: blur(4px); /* লিকুইড ও গ্লোয়িং ভাইব দেওয়ার জন্য */
+  filter: blur(5px);
 }
 
-/* অ্যাক্টিভ বা সিলেক্টেড স্টেটের লিকুইড ফিল */
 .liquid-btn.active .liquid-bg {
-  width: 110%;
+  width: 120%;
   height: 400px;
   border-radius: 40px;
 }
 
-/* প্রতিটি আলাদা বাটনের লিকুইড কালার ও গ্লো (3D Glossy Gradient) */
-/* Sleep Button (Blue) */
+/* Blue (Sleep) */
 .liquid-btn[data-color="blue"].active .liquid-bg {
   background: radial-gradient(circle at center, #60a5fa 0%, #2563eb 100%);
   box-shadow: inset 0 4px 12px rgba(255, 255, 255, 0.6), 0 12px 25px rgba(37, 99, 235, 0.4);
 }
 
-/* Do Not Disturb Button (Red) */
+/* Red (DND) */
 .liquid-btn[data-color="red"].active .liquid-bg {
   background: radial-gradient(circle at center, #f87171 0%, #dc2626 100%);
   box-shadow: inset 0 4px 12px rgba(255, 255, 255, 0.5), 0 12px 25px rgba(220, 38, 38, 0.5);
 }
 
-/* Personal Button (Orange) */
+/* Orange (Personal) */
 .liquid-btn[data-color="orange"].active .liquid-bg {
   background: radial-gradient(circle at center, #fb923c 0%, #ea580c 100%);
-  box-shadow: inset 0 4px 12px rgba(255, 255, 255, 0.6), 0 12px 25px rgba(234, 88, 12 0.4);
+  box-shadow: inset 0 4px 12px rgba(255, 255, 255, 0.6), 0 12px 25px rgba(234, 88, 12, 0.4);
 }
 
-/* বাটন অ্যাক্টিভ হলে টেক্সট কালার সাদা হবে */
 .liquid-btn.active .btn-content {
   color: #ffffff !important;
 }
 
-/* হোভার করলে হালকা থ্রিডি পুশ ইফেক্ট */
+/* ট্যাপ বা ক্লিক করলে পুশ ডাউন ইফেক্ট */
 .liquid-btn:active {
-  transform: scale(0.97);
+  transform: translateZ(2px) scale(0.97);
+}
+
+
+/* ==========================================
+   ৫. মোবাইল রেসপন্সিভ ৩D অপ্টিমাইজেশন
+   ========================================== */
+@media (max-width: 480px) {
+  /* মোবাইলের ছোট স্ক্রিনে যাতে ৩D প্যানেল কেটে না যায়, তাই একটু স্কেল ডাউন (ছোট) করা হয়েছে */
+  .glass-panel {
+    width: 100%;
+    max-width: 310px;
+    padding: 12px;
+    gap: 10px;
+    border-radius: 30px;
+    /* মোবাইলের জন্য নিখুঁত ও সেফ ৩D অ্যাঙ্গেল */
+    transform: rotateX(18deg) rotateY(-10deg) rotateZ(5deg) scale(0.95); 
+  }
+
+  .glass-panel:hover {
+    /* মোবাইলের টাচ রেসপন্সের জন্য হোভার ইফেক্ট সেম রাখা হলো */
+    transform: rotateX(18deg) rotateY(-10deg) rotateZ(5deg) scale(0.95);
+  }
+
+  /* বাটনের সাইজ মোবাইলের স্ক্রিন অনুযায়ী অ্যাডজাস্ট */
+  .liquid-btn {
+    width: 100%;
+    height: 58px;
+    border-radius: 45px;
+  }
+
+  .btn-content {
+    padding: 0 20px;
+    font-size: 15px;
+  }
+
+  .btn-content .icon {
+    font-size: 18px;
+  }
 }
